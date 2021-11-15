@@ -1,0 +1,10 @@
+# With --defaultconfig flag, users can easily get a default full config file as reference, with all fields (and field descriptions) included and default values set. 
+# Users can modify/create their own configs accordingly as reference. 
+# Because it is a full configuration, it is more suitable for advanced users.
+
+kubeAPIConfig:
+  burst: 200
+  contentType: application/vnd.kubernetes.protobuf
+  kubeConfig: /home/luo980/.kube/config
+  master: ""
+  qps: 100
