@@ -1,6 +1,7 @@
 package misc
 
 import (
+	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"os"
 	"xorm.io/xorm"
@@ -71,4 +72,27 @@ func TableCreate(e *xorm.Engine, name struct{}) bool {
 			return true
 		}
 	}
+}
+
+func GetQListFromDB(sql string ,e *xorm.Engine) []map[string]string {
+	result, err := e.Query(sql)
+	if err != nil {
+		fmt.Println("Query Err")
+	}
+	//var tmp string
+	final := make([]map[string]string, len(result))
+	for k, v := range result {
+		tmp := make(map[string]string)
+		for k1, v1 := range v {
+			tmp[k1] = string(v1)
+		}
+		final[k] = tmp
+		// logrus.WithFields(logrus.Fields{
+		// 	"final": final,
+		// 	"k":     k,
+		// 	"v":     v,
+		// 	"tmp":   tmp,
+		// }).Infof("routines")
+	}
+	return final
 }

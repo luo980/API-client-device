@@ -1,10 +1,13 @@
 package misc
 
 import (
+	"os"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/klog/v2"
 
 	"io/ioutil"
+
 	"sigs.k8s.io/yaml"
 
 	v1alpha2api "restandxorm/client/v1alpha2"
@@ -165,4 +168,15 @@ func BuildConfigFromFlags(masterUrl, kubeconfigPath string) (*restclient.Config,
 	return clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
 		&clientcmd.ClientConfigLoadingRules{ExplicitPath: kubeconfigPath},
 		&clientcmd.ConfigOverrides{ClusterInfo: clientcmdapi.Cluster{Server: masterUrl}}).ClientConfig()
+}
+
+func InitCrdClient() (*v1alpha2api.DevicesV1alpha2Client, error) {
+	ConfigPath := "./config.yaml"
+	connectionConfig, err := ParseConfig(ConfigPath)
+	if err != nil {
+		print("parse config failed.")
+		os.Exit(-1)
+	}
+	crdClient := InitRestClient(connectionConfig.KubeAPIConfig)
+	return crdClient, err
 }
